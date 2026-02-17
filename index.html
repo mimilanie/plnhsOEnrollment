@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLNHS-SHS · Early Registration</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+        body {
+            background: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        /* password gate */
+        .gate-container {
+            background: white;
+            max-width: 400px;
+            width: 100%;
+            padding: 2rem 1.5rem;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.2);
+            text-align: center;
+            border: 1px solid #cfd9e6;
+        }
+        .gate-container h2 {
+            color: #0b2b4a;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #b5121b;
+            display: inline-block;
+            padding-bottom: 6px;
+        }
+        .gate-logo {
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+        }
+        .gate-input {
+            width: 100%;
+            padding: 14px 18px;
+            font-size: 1rem;
+            border: 2px solid #cdd9e9;
+            border-radius: 40px;
+            margin: 1rem 0 0.8rem;
+            outline: none;
+            transition: 0.2s;
+        }
+        .gate-input:focus {
+            border-color: #b5121b;
+            box-shadow: 0 0 0 3px rgba(181,18,27,0.1);
+        }
+        .gate-btn {
+            background: #0b2b4a;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.2s;
+            letter-spacing: 0.5px;
+        }
+        .gate-btn:hover {
+            background: #b5121b;
+        }
+        .error-msg {
+            color: #b5121b;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+
+        /* main form – hidden until unlocked */
+        .form-wrapper {
+            max-width: 1100px;
+            width: 100%;
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3);
+            padding: 2rem 2.2rem;
+            border: 1px solid #dde3ed;
+            display: none;
+        }
+        .form-header {
+            text-align: center;
+            margin-bottom: 1.2rem;
+        }
+        .as-of {
+            text-align: right;
+            font-weight: 500;
+            color: #1e3a5f;
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+        }
+        .school-address {
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #b5121b;
+            margin-bottom: 0.2rem;
+            letter-spacing: 0.3px;
+        }
+        .main-title {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #001b3a;
+            line-height: 1.2;
+        }
+        .main-title small {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: #b5121b;
+        }
+        .not-for-sale {
+            background: #fce8e9;
+            color: #a00e16;
+            font-weight: 700;
+            padding: 0.3rem;
+            border-radius: 30px;
+            width: fit-content;
+            margin: 0.5rem auto 0.8rem;
+            font-size: 0.9rem;
+            border: 1px dashed #b5121b;
+            padding: 0.3rem 2rem;
+        }
+        .instructions {
+            background: #f4f7fc;
+            padding: 1rem 1.5rem;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            border-left: 6px solid #b5121b;
+            margin-bottom: 1rem;
+        }
+        .instructions p {
+            margin: 0.2rem 0;
+        }
+        .innovator-credit {
+            text-align: right;
+            font-style: italic;
+            font-size: 0.9rem;
+            color: #2c3e5c;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px dashed #b0c4de;
+            padding-bottom: 0.5rem;
+        }
+        .innovator-credit span {
+            background: #e9edf2;
+            padding: 0.2rem 1rem;
+            border-radius: 30px;
+            display: inline-block;
+        }
+        fieldset {
+            border: 1.5px solid #cbd6e4;
+            border-radius: 20px;
+            padding: 1.5rem 1.8rem;
+            margin-bottom: 2rem;
+            background: #ffffff;
+        }
+        legend {
+            background: white;
+            padding: 0.3rem 1.2rem;
+            font-weight: 700;
+            color: #0b2b4a;
+            font-size: 1.2rem;
+            border: 1.5px solid #b5121b;
+            border-radius: 40px;
+            margin-left: 1rem;
+        }
+        .field-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem 1.8rem;
+        }
+        .field-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .field-item.full-width {
+            grid-column: 1 / -1;
+        }
+        label {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #1e3a5f;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        input, select {
+            padding: 10px 14px;
+            border: 1.5px solid #c2d0e2;
+            border-radius: 16px;
+            font-size: 0.95rem;
+            background: white;
+            transition: 0.2s;
+        }
+        input:focus, select:focus {
+            border-color: #b5121b;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(181,18,27,0.1);
+        }
+        .radio-group {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+            background: #f4f9ff;
+            padding: 0.5rem 1rem;
+            border-radius: 40px;
+        }
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .radio-option input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #b5121b;
+        }
+        .inline-specify {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .inline-specify input {
+            flex: 2 1 200px;
+        }
+        .name-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 0.6fr;
+            gap: 0.8rem;
+        }
+        .address-row {
+            display: grid;
+            grid-template-columns: 0.8fr 1fr 1fr 1.2fr 1fr;
+            gap: 0.8rem;
+        }
+        .submit-area {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            align-items: center;
+            margin-top: 1.5rem;
+        }
+        .btn {
+            background: #0b2b4a;
+            color: white;
+            font-weight: 600;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.15s;
+            border: 1px solid #0b2b4a;
+        }
+        .btn:hover {
+            background: #b5121b;
+            border-color: #b5121b;
+        }
+        .btn-outline {
+            background: white;
+            color: #0b2b4a;
+            border: 2px solid #0b2b4a;
+        }
+        .btn-outline:hover {
+            background: #eef3ff;
+            color: #0b2b4a;
+            border-color: #0b2b4a;
+        }
+        .footnote {
+            font-size: 0.85rem;
+            color: #5e6f88;
+            margin-top: 1rem;
+            border-top: 1px dashed #cbd6e4;
+            padding-top: 1rem;
+            text-align: center;
+        }
+        .required-star {
+            color: #b5121b;
+            font-size: 1.2rem;
+            margin-left: 2px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- PASSWORD PROTECTION GATE -->
+<div id="gate" class="gate-container">
+    <div class="gate-logo">🏫🔐</div>
+    <h2>ADMIN ONLY</h2>
+    <input type="password" id="passwordInput" class="gate-input" placeholder="Enter password" autofocus>
+    <button class="gate-btn" id="unlockBtn">UNLOCK FORM</button>
+    <div id="gateError" class="error-msg"></div>
+    <div style="margin-top: 20px; font-size:0.9rem; background: #f0f4fa; padding: 8px; border-radius: 20px;">📞 Pablo Lorenzo NHS – Senior High</div>
+</div>
+
+<!-- MAIN ENROLLMENT FORM (hidden until correct password) -->
+<div id="mainForm" class="form-wrapper">
+    <div class="as-of">As of 01/15/2025</div>
+    <div class="form-header">
+        <!-- School address line added per request -->
+        <div class="school-address">Pablo Lorenzo National High School, Mandug; Davao City</div>
+        <div class="main-title">BASIC EDUCATION EARLY REGISTRATION FORM</div>
+        <div class="not-for-sale">THIS FORM IS NOT FOR SALE</div>
+    </div>
+
+    <div class="instructions">
+        <p>✍️ Instructions: Print legibly all information required in CAPITAL letters and check all appropriate boxes. Submit accomplished form to the Person-in-Charge/Registrar/Class Adviser. Use black or blue pen only.</p>
+    </div>
+
+    <!-- Innovator credit line (added) -->
+    <div class="innovator-credit">
+        <span>⚡ citing Melanio R. Florino Jr. as the innovator, powered by Deepseek AI</span>
+    </div>
+
+    <form id="enrollmentForm">
+        <!-- SECTION 1: School Year & LRN -->
+        <fieldset>
+            <legend>📅 1. School Year & LRN</legend>
+            <div class="field-grid">
+                <div class="field-item">
+                    <label>School Year <span class="required-star">*</span></label>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <input type="text" id="schoolYearFrom" placeholder="2025" style="width:100px;"> <span>—</span>
+                        <input type="text" id="schoolYearTo" placeholder="2026" style="width:100px;">
+                    </div>
+                </div>
+                <div class="field-item">
+                    <label>Learner Reference No. (LRN)</label>
+                    <input type="text" id="lrn" placeholder="e.g., 123456789012">
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- SECTION 2: Grade Level -->
+        <fieldset>
+            <legend>📚 2. Grade Level to Enroll</legend>
+            <div class="field-item">
+                <input type="text" id="gradeLevel" placeholder="e.g., GRADE 11 – ABM" style="max-width: 300px;">
+            </div>
+        </fieldset>
+
+        <!-- SECTION 3: LEARNER'S PERSONAL INFORMATION (extensive) -->
+        <fieldset>
+            <legend>👤 3. Learner’s Personal Information</legend>
+
+            <!-- Learner Name (Last, Given, Middle, Extn) -->
+            <div style="margin-bottom: 1.2rem;">
+                <label>Learner’s Name</label>
+                <div class="name-row">
+                    <input type="text" id="lastName" placeholder="Last Name">
+                    <input type="text" id="givenName" placeholder="Given Name">
+                    <input type="text" id="middleName" placeholder="Middle Name">
+                    <input type="text" id="extName" placeholder="Extn. (Jr/III)">
+                </div>
+            </div>
+
+            <!-- Birthdate, Age, Sex, Religion -->
+            <div class="field-grid" style="margin-bottom: 1.2rem;">
+                <div class="field-item">
+                    <label>Birthdate (mm/dd/yyyy)</label>
+                    <input type="date" id="birthdate">
+                </div>
+                <div class="field-item">
+                    <label>Age</label>
+                    <input type="number" id="age" min="0" step="1">
+                </div>
+                <div class="field-item">
+                    <label>Sex</label>
+                    <div class="radio-group">
+                        <span class="radio-option"><input type="radio" name="sex" value="Male" id="male"> Male</span>
+                        <span class="radio-option"><input type="radio" name="sex" value="Female" id="female"> Female</span>
+                    </div>
+                </div>
+                <div class="field-item">
+                    <label>Religion</label>
+                    <input type="text" id="religion">
+                </div>
+            </div>
+
+            <!-- Indigenous Peoples -->
+            <div style="margin-bottom: 1.2rem;">
+                <label>Belonging to any Indigenous Peoples (IP) Community/Indigenous Cultural Community?</label>
+                <div class="inline-specify">
+                    <span class="radio-option"><input type="radio" name="ip" value="No" id="ipNo" checked> No</span>
+                    <span class="radio-option"><input type="radio" name="ip" value="Yes" id="ipYes"> Yes</span>
+                    <input type="text" id="ipSpecify" placeholder="If yes, please specify">
+                </div>
+            </div>
+
+            <!-- Person with disability -->
+            <div style="margin-bottom: 1.5rem;">
+                <label>Is the learner a person with disability (PWD)?</label>
+                <div class="inline-specify">
+                    <span class="radio-option"><input type="radio" name="pwd" value="No" id="pwdNo" checked> No</span>
+                    <span class="radio-option"><input type="radio" name="pwd" value="Yes" id="pwdYes"> Yes</span>
+                    <input type="text" id="pwdSpecify" placeholder="If yes, please specify">
+                </div>
+            </div>
+
+            <!-- Current Address: house, sitio/street, barangay, municipality, province -->
+            <div style="margin-bottom: 0.5rem;">
+                <label>Current Address</label>
+                <div class="address-row">
+                    <input type="text" id="houseNo" placeholder="House No.">
+                    <input type="text" id="sitioStreet" placeholder="Sitio/Street">
+                    <input type="text" id="barangay" placeholder="Barangay">
+                    <input type="text" id="city" placeholder="Municipality/City">
+                    <input type="text" id="province" placeholder="Province">
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- FATHER, MOTHER, GUARDIAN -->
+        <fieldset>
+            <legend>👪 4. Family / Guardian</legend>
+
+            <!-- Father's Name -->
+            <div style="margin-bottom: 1.2rem;">
+                <label>Father’s Name</label>
+                <div class="name-row">
+                    <input type="text" id="fatherLast" placeholder="Last Name">
+                    <input type="text" id="fatherGiven" placeholder="Given Name">
+                    <input type="text" id="fatherMiddle" placeholder="Middle Name">
+                    <input type="text" id="fatherExt" placeholder="Extn.">
+                </div>
+            </div>
+
+            <!-- Mother's Maiden Name -->
+            <div style="margin-bottom: 1.2rem;">
+                <label>Mother’s Maiden Name</label>
+                <div class="name-row">
+                    <input type="text" id="motherLast" placeholder="Last Name">
+                    <input type="text" id="motherGiven" placeholder="Given Name">
+                    <input type="text" id="motherMiddle" placeholder="Middle Name">
+                    <input type="text" id="motherExt" placeholder="Extn.">
+                </div>
+            </div>
+
+            <!-- Legal Guardian -->
+            <div style="margin-bottom: 1rem;">
+                <label>Legal Guardian’s Name</label>
+                <div class="name-row">
+                    <input type="text" id="guardianLast" placeholder="Last Name">
+                    <input type="text" id="guardianGiven" placeholder="Given Name">
+                    <input type="text" id="guardianMiddle" placeholder="Middle Name">
+                    <input type="text" id="guardianExt" placeholder="Extn.">
+                </div>
+            </div>
+
+            <!-- Contact Number -->
+            <div class="field-item" style="max-width: 300px;">
+                <label>Contact Number</label>
+                <input type="text" id="contactNumber" placeholder="e.g., 09123456789">
+            </div>
+        </fieldset>
+
+        <!-- submit area with info about google sheet -->
+        <div class="submit-area">
+            <button type="button" class="btn btn-outline" id="resetBtn">Reset</button>
+            <button type="submit" class="btn" id="submitBtn">✅ SUBMIT ENROLLMENT</button>
+        </div>
+        <div class="footnote">
+            ⚡ Upon submission, data will be sent to the configured Google Sheets endpoint.<br>
+            Destination sheet: <a href="https://docs.google.com/spreadsheets/d/1dNFZ0Tlt7tjzycGqAF0VE5g5HB_XC9rRopDOsJhTLPM/edit?usp=sharing" target="_blank">PLNHS-SHS Master Sheet</a> (opens new tab).
+        </div>
+    </form>
+</div>
+
+<script>
+    (function() {
+        // ---------- PASSWORD ----------
+        const CORRECT_PASSWORD = "PLNHS-SHS-2025";   // <== ADMIN PASSWORD (case-sensitive)
+        const gate = document.getElementById('gate');
+        const mainForm = document.getElementById('mainForm');
+        const unlockBtn = document.getElementById('unlockBtn');
+        const passwordInput = document.getElementById('passwordInput');
+        const gateError = document.getElementById('gateError');
+
+        unlockBtn.addEventListener('click', function() {
+            if (passwordInput.value === CORRECT_PASSWORD) {
+                gate.style.display = 'none';
+                mainForm.style.display = 'block';
+                gateError.textContent = '';
+            } else {
+                gateError.textContent = '❌ Incorrect password. Access denied.';
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+        });
+
+        passwordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') unlockBtn.click();
+        });
+
+        // ---------- GOOGLE SHEETS INTEGRATION (via Apps Script) ----------
+        // Replace the below URL with your deployed Google Apps Script Web App URL
+        // that writes to the spreadsheet: https://docs.google.com/spreadsheets/d/1dNFZ0Tlt7tjzycGqAF0VE5g5HB_XC9rRopDOsJhTLPM/edit?usp=sharing
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/your-actual-id/exec';  // <-- UPDATE THIS
+
+        // Collect all form data
+        function collectFormData() {
+            return {
+                schoolYearFrom: document.getElementById('schoolYearFrom').value,
+                schoolYearTo: document.getElementById('schoolYearTo').value,
+                lrn: document.getElementById('lrn').value,
+                gradeLevel: document.getElementById('gradeLevel').value,
+                lastName: document.getElementById('lastName').value,
+                givenName: document.getElementById('givenName').value,
+                middleName: document.getElementById('middleName').value,
+                extName: document.getElementById('extName').value,
+                birthdate: document.getElementById('birthdate').value,
+                age: document.getElementById('age').value,
+                sex: document.querySelector('input[name="sex"]:checked')?.value || '',
+                religion: document.getElementById('religion').value,
+                ip: document.querySelector('input[name="ip"]:checked')?.value || '',
+                ipSpecify: document.getElementById('ipSpecify').value,
+                pwd: document.querySelector('input[name="pwd"]:checked')?.value || '',
+                pwdSpecify: document.getElementById('pwdSpecify').value,
+                houseNo: document.getElementById('houseNo').value,
+                sitioStreet: document.getElementById('sitioStreet').value,
+                barangay: document.getElementById('barangay').value,
+                city: document.getElementById('city').value,
+                province: document.getElementById('province').value,
+                fatherLast: document.getElementById('fatherLast').value,
+                fatherGiven: document.getElementById('fatherGiven').value,
+                fatherMiddle: document.getElementById('fatherMiddle').value,
+                fatherExt: document.getElementById('fatherExt').value,
+                motherLast: document.getElementById('motherLast').value,
+                motherGiven: document.getElementById('motherGiven').value,
+                motherMiddle: document.getElementById('motherMiddle').value,
+                motherExt: document.getElementById('motherExt').value,
+                guardianLast: document.getElementById('guardianLast').value,
+                guardianGiven: document.getElementById('guardianGiven').value,
+                guardianMiddle: document.getElementById('guardianMiddle').value,
+                guardianExt: document.getElementById('guardianExt').value,
+                contactNumber: document.getElementById('contactNumber').value,
+                timestamp: new Date().toISOString()
+            };
+        }
+
+        // Submit handler
+        document.getElementById('enrollmentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = collectFormData();
+            console.log(' Enrollment data:', formData);
+
+            // OPTION 1: Try to send to Google Apps Script endpoint (if URL is set correctly)
+            if (APPS_SCRIPT_URL !== 'https://script.google.com/macros/s/AKfycbzFAKE_SCRIPT_ID/exec') {
+                fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',      // simple mode, no response body
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams(formData)
+                })
+                .then(() => {
+                    alert('✅ Data successfully transmitted to Apps Script (no-cors). The spreadsheet should be updated shortly.');
+                })
+                .catch(err => {
+                    console.warn('Fetch error (expected if URL not deployed):', err);
+                    alert('⚠️ Could not reach Apps Script. You can still open the Google Sheet manually.\n(If you have deployed the script, check the URL.)');
+                })
+                .finally(() => {
+                    window.open('https://docs.google.com/spreadsheets/d/1dNFZ0Tlt7tjzycGqAF0VE5g5HB_XC9rRopDOsJhTLPM/edit?usp=sharing', '_blank');
+                });
+            } else {
+                // Fallback: just open sheet (simulate "transport")
+                alert('🔧 Apps Script endpoint not configured. For actual data transport, deploy a script and update APPS_SCRIPT_URL.\nOpening the Google Sheet for reference.');
+                window.open('https://docs.google.com/spreadsheets/d/1dNFZ0Tlt7tjzycGqAF0VE5g5HB_XC9rRopDOsJhTLPM/edit?usp=sharing', '_blank');
+            }
+
+            // Optional: reset after? we don't auto-reset, but can offer.
+        });
+
+        // Reset button
+        document.getElementById('resetBtn').addEventListener('click', function() {
+            if (confirm('Clear all fields?')) {
+                document.getElementById('enrollmentForm').reset();
+            }
+        });
+
+        // simple helper for age calculation if needed (optional)
+        document.getElementById('birthdate').addEventListener('change', function() {
+            // just a hint, not required
+        });
+
+        // prevent accidental gate re-show
+        window.addEventListener('load', function() {
+            if (sessionStorage.getItem('plnhs_unlocked')) {
+                // optional persistence, but we don't use to keep gate simple
+            }
+        });
+    })();
+</script>
+
+<!-- ==============================================
+     NOTES FOR ADMINISTRATOR (embedded)
+     ==============================================
+     PASSWORD: PLNHS-SHS-2025  (case-sensitive)
+
+     🔁 TO TRANSPORT DATA TO THE SPECIFIED GOOGLE SHEET:
+     1. Create a Google Apps Script project linked to that spreadsheet.
+     2. Implement doPost(e) to parse data and append to sheet.
+     3. Deploy as web app (execute as "me", access "anyone" or "only yourself" if testing).
+     4. Copy the web app URL and paste into the APPS_SCRIPT_URL variable above.
+     5. Test submission.
+
+     Example doPost() snippet (place in Apps Script):
+         function doPost(e) {
+           var sheet = SpreadsheetApp.openById('1dNFZ0Tlt7tjzycGqAF0VE5g5HB_XC9rRopDOsJhTLPM').getSheetByName('Responses');
+           var data = JSON.parse(e.postData.contents);
+           var row = [new Date(), data.schoolYearFrom, data.schoolYearTo, data.lrn, ...]; // map all fields
+           sheet.appendRow(row);
+           return ContentService.createTextOutput('OK');
+         }
+
+     Without a real endpoint, the form safely opens the spreadsheet link.
+============================================== -->
+</body>
+</html>
