@@ -322,7 +322,7 @@
 
     <!-- Innovator credit line (added) -->
     <div class="innovator-credit">
-        <span>⚡ citing Melanio R. Florino Jr. as the innovator, powered by Deepseek AI</span>
+        <span>⚡ citin Melanio R. Florino Jr. as the innovator, powered by Deepseek AI</span>
     </div>
 
     <form id="enrollmentForm">
@@ -508,7 +508,7 @@
         // ---------- GOOGLE SHEETS INTEGRATION (via Apps Script) ----------
         // Replace the below URL with your deployed Google Apps Script Web App URL
         // that writes to the spreadsheet: https://docs.google.com/spreadsheets/d/1dNFZ0Tlt7tjzycGqAF0VE5g5HB_XC9rRopDOsJhTLPM/edit?usp=sharing
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyQ4MtDQLNRsNjyAQmRnPF9Y-uDaKlq-849ikVg_eanamI6cih5j9l-TuargJNcwLVoUg/exec';  // <-- UPDATE THIS
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyFKKFGXn5iIl-ETYaQ3QZLmlFF8sGxwEGuAnaLJgTExNdDfpTXvmMSiVA4U4n9uN-KvA/exec';  // <-- UPDATE THIS
 
         // Collect all form data
         function collectFormData() {
@@ -559,7 +559,7 @@
             console.log(' Enrollment data:', formData);
 
             // OPTION 1: Try to send to Google Apps Script endpoint (if URL is set correctly)
-            if (APPS_SCRIPT_URL !== 'https://script.google.com/macros/s/AKfycbzFAKE_SCRIPT_ID/exec') {
+            if (APPS_SCRIPT_URL !== 'https://script.google.com/macros/s/AKfycby2cqufWp2siUgAxJyGxnw4n-BJo-495zxqRgVlNeQtFgJMqnRuBQIUHGGqqomJaNesaA/exec') {
                 fetch(APPS_SCRIPT_URL, {
                     method: 'POST',
                     mode: 'no-cors',      // simple mode, no response body
