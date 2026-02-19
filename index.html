@@ -508,7 +508,7 @@
         // ---------- GOOGLE SHEETS INTEGRATION (via Apps Script) ----------
         // Replace the below URL with your deployed Google Apps Script Web App URL
         // that writes to the spreadsheet: https://docs.google.com/spreadsheets/d/1dNFZ0Tlt7tjzycGqAF0VE5g5HB_XC9rRopDOsJhTLPM/edit?usp=sharing
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyFKKFGXn5iIl-ETYaQ3QZLmlFF8sGxwEGuAnaLJgTExNdDfpTXvmMSiVA4U4n9uN-KvA/exec';  // <-- UPDATE THIS
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzXp9pMx0inO1jm2Ge_ogZGSplUG9xaEV3PE_q4NE3z/dev';  // <-- UPDATE THIS
 
         // Collect all form data
         function collectFormData() {
@@ -559,7 +559,7 @@
             console.log(' Enrollment data:', formData);
 
             // OPTION 1: Try to send to Google Apps Script endpoint (if URL is set correctly)
-            if (APPS_SCRIPT_URL !== 'https://script.google.com/macros/s/AKfycbx87w18CQ8EVbImILxaZ9MUaaq1XFWp9iYgYYFofIzYeCOSRnwBYZpWZI1-Ozr4B59fqw/exec') {
+            if (APPS_SCRIPT_URL !== 'https://script.google.com/macros/s/AKfycbzFAKE_SCRIPT_ID/exec') {
                 fetch(APPS_SCRIPT_URL, {
                     method: 'POST',
                     mode: 'no-cors',      // simple mode, no response body
